@@ -1,6 +1,7 @@
-@SuppressWarnings("ConstantConditions")
+@SuppressWarnings({"ConstantConditions", "CommentedOutCode"})
 public class environment implements EnvironmentInterface{
     Room[] room;
+    int score;
 
     environment() {
         room = new Room[2];
@@ -18,6 +19,7 @@ public class environment implements EnvironmentInterface{
             room[1].agentPosition = false;
             room[0].agentPosition = true;
             System.out.println("Agent is now moved to Left room.");
+            score -= 10;
         }
         return 0;
     }
@@ -32,6 +34,7 @@ public class environment implements EnvironmentInterface{
             room[0].agentPosition = false;
             room[1].agentPosition = true;
             System.out.println("Agent is now moved to Right room.");
+            score -= 10;
         }
         return 0;
     }
@@ -41,10 +44,15 @@ public class environment implements EnvironmentInterface{
         int currentRoom = 0;
         if (room[0].agentPosition) currentRoom = 0; // Left
         else if (room[1].agentPosition) currentRoom = 1; // Right
-        System.out.println("Room[" + currentRoom + "] " +
+        if (room[currentRoom].dirty) {
+            System.out.println("Room[" + currentRoom + "] " +
+                    (currentRoom == 0 ? "(Left)" : "(Right)") +
+                    " is now clean.");
+            room[currentRoom].dirty = false;
+            score += 100;
+        } else System.out.println("Room[" + currentRoom + "] " +
                 (currentRoom == 0 ? "(Left)" : "(Right)") +
-                "is now clean.");
-        room[currentRoom].dirty = false;
+                " is already clean.");
     }
 
     @Override
@@ -60,6 +68,6 @@ public class environment implements EnvironmentInterface{
 
     @Override
     public int getScore() {
-        return 0;
+        return score;
     }
 }
